@@ -92,6 +92,7 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
+    "ethers": "^3.0.27",
     "repl": "^0.1.3"
   }
 }
