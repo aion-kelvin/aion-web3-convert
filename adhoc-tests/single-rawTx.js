@@ -4,34 +4,13 @@ import aion account to node:
 ./aion.sh -a import private-key-hex
 */
 
-//let Web3 = require("../../src/index");
-// let Web3 = require('aion-web3')
-// let Web3 = require('web3')
 var Web3 = require('../packages/web3');
-
 let client = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 
 /*
 ⚠️fill in these values
 because it uses `unlockAccount` rpc call it needs the password
-let accounts = [
-  {
-    address: "",
-    password: "",
-    privateKey: ""
-  },
-  {
-    address: "",
-    password: "",
-    privateKey: ""
-  },
-  {
-    address: "",
-    password: "",
-    privateKey: ""
-  }
-];*/
-
+*/
 let accounts = [
   {
     address: '0xa0202797a7aff86fec1a5d8b7cacea276de5bcfc2e8b14878c9ba48d7d5330a0',
@@ -50,51 +29,49 @@ let accounts = [
   }
 ]
 
-
-  let privateKey = accounts[0].privateKey;
-  let account = client.eth.accounts.privateKeyToAccount(privateKey);
-  let { address } = account;
+let privateKey = accounts[0].privateKey;
+let account = client.eth.accounts.privateKeyToAccount(privateKey);
+let { address } = account;
 
   // get the next one or the first
 //  let friend = accounts[index + 1] || accounts[0];
-  let friend = accounts[1];
+let friend = accounts[1];
 
-  console.log("address", address);
+console.log("address", address);
 
-  client.eth.getBalance(address, (err, res) => {
+client.eth.getBalance(address, (err, res) => {
+  if (err !== null && err !== undefined) {
+    console.error("error getting balance", address, err);
+    return;
+  }
+  console.log("balance", address, res);
+});
+
+let tx = {
+  to: friend.address,
+  value: 13 * 1000000000000000000,
+  gas: 54321
+};
+
+account.signTransaction(tx, (err, res) => {
+  if (err !== null && err !== undefined) {
+    return console.error("error signing transaction", tx, res, err);
+  }
+
+  console.log("messageHash", res.messageHash);
+  console.log("rawTransaction", res.rawTransaction);
+  console.log("signature", res.signature);
+
+  // decode the transaction if you wish to
+  // let rlp = require('aion-rlp')
+  // let decoded = rlp.decode(res.rawTransaction)
+  // console.log('decoded', decoded)
+
+  client.eth.sendSignedTransaction(res.rawTransaction, (err, res) => {
     if (err !== null && err !== undefined) {
-      console.error("error getting balance", address, err);
-      return;
-    }
-    console.log("balance", address, res);
-  });
-
-  let tx = {
-    to: friend.address,
-    value: 13 * 1000000000000000000,
-    gas: 54321
-  };
-
-  account.signTransaction(tx, (err, res) => {
-    if (err !== null && err !== undefined) {
-      return console.error("error signing transaction", tx, res, err);
+      return console.error("error sending transaction", err);
     }
 
-    console.log("messageHash", res.messageHash);
-    console.log("rawTransaction", res.rawTransaction);
-    console.log("signature", res.signature);
-
-    // decode the transaction if you wish to
-    // let rlp = require('aion-rlp')
-    // let decoded = rlp.decode(res.rawTransaction)
-    // console.log('decoded', decoded)
-
-    client.eth.sendSignedTransaction(res.rawTransaction, (err, res) => {
-    //aion.sendSignedTransaction(res.rawTransaction, (err, res) => {
-      if (err !== null && err !== undefined) {
-        return console.error("error sending transaction", err);
-      }
-
-      console.log("transaction hash from server", res);
-    });
+    console.log("transaction hash from server", res);
   });
+});
