@@ -49,6 +49,7 @@ let tx = {
   gas: 54321
 };
 
+// web3.eth.accounts.signTransaction(tx, privateKey [, callback]);
 account.signTransaction(tx, (err, res) => {
   if (err !== null && err !== undefined) {
     return console.error("error signing transaction", tx, res, err);
