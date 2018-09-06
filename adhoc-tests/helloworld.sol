@@ -1,4 +1,4 @@
-pragma solidity ^0.4.22;
+pragma solidity ^0.4.15;
 contract helloWorld {
  function sayHello () public returns (string) {
    return 'hello world';
