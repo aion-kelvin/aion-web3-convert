@@ -56,7 +56,7 @@ let tx = {
 
 // web3.eth.signTransaction(tx, privateKey [, callback]);
 
-client.eth.personal.unlockAccount("0xa0450c4333e72ed26552d7462c0b3669924eec816a219b3960d5b3f0b33f7444", "password", 600)
+client.eth.personal.unlockAccount("0xa0450c4333e72ed26552d7462c0b3669924eec816a219b3960d5b3f0b33f7444", "pw-goes-here", 600)
 .then(console.log('Account unlocked!'));
 
 client.eth.signTransaction(tx, '0xa0450c4333e72ed26552d7462c0b3669924eec816a219b3960d5b3f0b33f7444', (err, res) => {
